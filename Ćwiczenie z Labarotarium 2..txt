@@ -1,0 +1,18 @@
+Select NazwaKraju, Kontynent, Powierzchnia From Kraj	
+Select NazwaKraju From Kraj Where Populacja>100000000 
+Select NazwaKraju, GDP From Kraj Where Populacja>50000000 order by GDP desc
+Select NazwaKraju,Populacja, round(Populacja,4) as do_4_miejsc from Kraj where Kontynent like 'Europe'
+Select NazwaKraju,Powierzchnia From Kraj where NazwaKraju in ('Poland', 'Germany', 'United Kingdom')
+Select NazwaKraju From Kraj where NazwaKraju like '%United%'
+Select NazwaKraju From kraj where Populacja>200000 or Powierzchnia>5000000
+Select NazwaKraju From kraj where Populacja>200000 or Powierzchnia>5000000 
+Select top 3 Cena from ZwierzetaZamowienie order by Cena desc
+Select top 4 GDP,NazwaKraju from kraj where Kontynent like 'Asia' order by GDP desc 
+Select Imie,NazwaKraju from ZwierzetaZamowienie inner join Kraj on Kraj.IDKraju=ZwierzetaZamowienie.IDKraju union select Imie,NazwaKraju from kraj inner join ZwierzetaZoo on kraj.IDKraju = ZwierzetaZoo.IDKraju
+Select NazwaKraju from kraj inner join ZwierzetaZoo on kraj.idkraju = zwierzetazoo.idkraju
+select nazwakraju from kraj inner join zwierzetazoo on kraj.idkraju = zwierzetazoo.idkraju where zwierzetazoo.imie is null
+select kontynent, sum(populacja) from kraj where populacja>100000000 group by kontynent
+select nazwakraju, count(ZwierzetaZoo.idkraju) as IloscZwierzat from kraj left join zwierzetazoo on zwierzetazoo.idkraju = kraj.idkraju group by nazwakraju
+select gatunek,imie from zwierzetazamowienie union all select gatunek, imie from zwierzetazoo 
+select gatunek,nazwakraju, convert(varchar(30), datadostarczenia, 105) from kraj inner join zwierzetazamowienie on kraj.idkraju = zwierzetazamowienie.idkraju union all select gatunek, nazwakraju, 'w zoo' as datadostarczenia from kraj inner join zwierzetazoo on kraj.idkraju=zwierzetazoo.idkraju
+select zwierzetazamowienie.imie from zwierzetazoo inner join zwierzetazamowienie on zwierzetazoo.imie = zwierzetazamowienie.imie
