@@ -1,0 +1,144 @@
+create table Biblioteki(
+IdBiblioteki int Identity (1,1) primary key,
+NazwaBiblioteki Varchar(30),
+Adres varchar(30),
+IloscKsiazek varchar(5),
+)
+insert into Biblioteki(NazwaBiblioteki,Adres,IloscKsiazek)
+values('Ulubiona','Kaliego 15,'300')
+insert into Biblioteki(NazwaBiblioteki,Adres,IloscKsiazek)
+values('Warszawska','al.Jerozolismskie 15','600')
+
+
+create table Pracownicy(
+IdPracownika Int Identity (1,1) primary key,
+Imie Varchar(10),
+Nazwisko varchar(20),
+Wiek int,
+Posada varchar(20),
+IdBiblioteki integer not null foreign key references Biblioteki(IdBiblioteki),
+)
+insert into Pracownicy(Imie,Nazwisko,Wiek,Posada,IdBiblioteki)
+values('Jan','Kowalski',40,'Bibliotekarz',1)
+insert into Pracownicy(Imie,Nazwisko,Wiek,Posada,IdBiblioteki)
+values('Robert','Lewy',42,'Security',2)
+insert into Pracownicy(Imie,Nazwisko,Wiek,Posada,IdBiblioteki)
+values('Jakub','Wajdelota',15,'Bibliotekarz',2)
+insert into Pracownicy(Imie,Nazwisko,Wiek,Posada,IdBiblioteki)
+values('Konrad','Bak',35,'Wozny',1)
+
+create table Ksiazki(
+Idksiazki int Identity (1,1) primary key,
+NazwaKsiazki Varchar(30) unique,
+IloscStron int,
+IdBiblioteki integer not null foreign key references Biblioteki(IdBiblioteki),
+
+)
+insert into ksiazki(nazwaksiazki,iloscstron,idbiblioteki)
+values('Lalka cz.1','500',1)
+insert into ksiazki(nazwaksiazki,iloscstron,idbiblioteki)
+values('Lalka cz.2','500',1)
+insert into ksiazki(nazwaksiazki,iloscstron,idbiblioteki)
+values('Chłopi,'1000',2)
+insert into ksiazki(nazwaksiazki,iloscstron,idbiblioteki)
+values('Pan Tadeusz','500',2)
+
+insert into ksiazki(nazwaksiazki,iloscstron,idbiblioteki)
+values('W pustyni i w puszczy’,'400',2)
+insert into ksiazki(nazwaksiazki,iloscstron,idbiblioteki)
+values('Krzyżacy','1000',1)
+insert into ksiazki(nazwaksiazki,iloscstron,idbiblioteki)
+values('Przygody Odyseusza','300',2)
+insert into ksiazki(nazwaksiazki,iloscstron,idbiblioteki)
+values('Opium w Rosole','140',1)
+
+
+
+
+
+
+
+
+create table Autorzy(
+Imie Varchar(30),
+Nazwisko Varchar(30),
+Wiek int,
+idKsiazki int Identity (1,1) primary key foreign key references Ksiazki(IdKsiazki)
+
+)
+insert into autorzy(Imie,Nazwisko,Wiek)
+values('Boleslaw', 'Prus',30)
+insert into autorzy(Imie,Nazwisko,Wiek)
+values('Boleslaw', 'Prus',36)
+insert into autorzy(Imie,Nazwisko,Wiek)
+values('Wladyslaw', 'Reymont',29)
+insert into autorzy(Imie,Nazwisko,Wiek)
+values('Adam', 'Mickiewicz',29)
+insert into autorzy(Imie,Nazwisko,Wiek)
+values('Henryk', 'Sienkiewicz’,42)
+insert into autorzy(Imie,Nazwisko,Wiek)
+values('Henryk', 'Sienkiewicz',48)
+insert into autorzy(Imie,Nazwisko,Wiek)
+values('Jan', 'Parandowski',43)
+insert into autorzy(Imie,Nazwisko,Wiek)
+values('Hanna', 'Ozogowska',41)
+
+
+
+
+
+1.Wyswietl wszystko z tabeli autorzy
+select * from autorzy
+	
+2.Wyswietl autorow którzy ukończyli 35 lat
+select * from autorzy where wiek >35
+
+3. Wyswietl autorow którzy ukończyli 25 lat i uporządkuj malejąco
+select * from autorzy where wiek >25 
+order by wiek desc
+
+4.Wyswietl pracowników którzy maja w imieniu „ew”
+select * from pracownicy where imie like '%ew%'
+
+5.Wyswietl autorow którzy przekroczyli 25 lat i na imie maja Adam
+select * from autorzy where wiek>30 and imie='boleslaw'
+
+6.Wyswietl 4 najstarszych autorow 
+select top 4 wiek, imie,nazwisko from autorzy order by wiek desc	
+
+7.Wyswietl nazwe ksiazki oraz jej autora
+select nazwaksiazki, imie,nazwisko from ksiazki a 
+inner join autorzy b on a.idksiazki=b.idksiazki
+
+8. Wyswietl dane pracownika oraz nazwe biblioteki w której pracuje
+select imie, nazwisko, nazwabiblioteki from pracownicy a 
+inner join biblioteki b on a.idbiblioteki=b.idbiblioteki
+
+9.Wyswietl książki które maja więcej niż 300 stron oraz nazwe biblioteki w której się znajduja
+select nazwaksiazki, nazwabiblioteki from ksiazki a 
+inner join biblioteki b on a.idbiblioteki=b.idbiblioteki
+where iloscstron>300
+
+
+10. Podaj ilość pracownikow z poszczególnych bibliotek
+select nazwabiblioteki, count(imie) as iloscpracownikow from pracownicy a 
+inner join biblioteki b on a.idbiblioteki=b.idbiblioteki
+group by b.nazwabiblioteki
+
+11.Wyswietl bibliotekę w której jest wielksza liczba stron
+SELECT top 1 nazwabiblioteki, SUM(iloscstron)as liczbastron FROM biblioteki a
+inner join ksiazki b on a.idbiblioteki=b.idbiblioteki
+group by nazwabiblioteki 
+order by liczbastron desc
+
+12.Ile jest kobiet wśród autorow 
+select count(imie) as liczbakobiet from autorzy where imie like '%a'
+
+13 Wyswietl ksiazke z najwieksza liczba stron
+select top 1 iloscstron, nazwaksiazki from ksiazki order by iloscstron desc
+	
+14.Wyswietl autorow którzy maja 29lat
+select imie, nazwisko from autorzy where wiek = '29'
+
+15.Wyswietl pracowników którzy sa niepełnoletni
+Select imie, nazwisko from pracownicy where wiek<18
